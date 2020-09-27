@@ -36,7 +36,7 @@ public class DependentService {
      */
     public void addDependent(Dependent addDependent, String enrolleeId) {
 
-        this.validator.entityValidator(addDependent.getId(), addDependent.getName(), addDependent.getDateOfBirth(), true);
+        this.validateDependent(addDependent, true);
 
         Enrollee existingEnrollee = this.enrollmentDAO.findById(enrolleeId)
                 .orElseThrow(() -> new ResourceDoesNotExistException("Unable To Add Dependent, Enrollee Does Not Exist For Id: " + enrolleeId));
@@ -62,7 +62,7 @@ public class DependentService {
      */
     public void modifyDependent(Dependent modifiedDependent, String enrolleeId, String dependentId) {
 
-        this.validator.entityValidator(modifiedDependent.getId(), modifiedDependent.getName(), modifiedDependent.getDateOfBirth(), false);
+        this.validateDependent(modifiedDependent, false);
 
         Enrollee existingEnrollee = this.enrollmentDAO.findById(enrolleeId)
                 .orElseThrow(() -> new ResourceDoesNotExistException("Unable To Modify Dependent, Enrollee Does Not Exist For Id: " + enrolleeId));
@@ -118,6 +118,18 @@ public class DependentService {
                 .filter(existingDependent -> existingDependent.getId().equals(dependentId))
                 .findAny()
                 .orElse(null);
+
+    }
+
+    /**
+     * Helper method to validate an Dependent
+     *
+     * @param dependent the Dependent to validate
+     * @param newEntity whether it is a new entity in the database or not
+     */
+    private void validateDependent(Dependent dependent, boolean newEntity) {
+
+        this.validator.entityValidator(dependent.getId(), dependent.getName(), dependent.getDateOfBirth(), newEntity);
 
     }
 

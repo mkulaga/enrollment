@@ -1,5 +1,6 @@
 package enrollment.service;
 
+import enrollment.common.Dependent;
 import enrollment.common.Enrollee;
 import enrollment.exceptions.ResourceAlreadyExistsException;
 import enrollment.exceptions.ResourceDoesNotExistException;
@@ -46,7 +47,7 @@ public class EnrolleeService {
      */
     public void addEnrollee(Enrollee addEnrollee) {
 
-        this.validator.entityValidator(addEnrollee.getId(), addEnrollee.getName(), addEnrollee.getDateOfBirth(), true);
+        this.validateEnrollee(addEnrollee, true);
 
         final Enrollee existingEnrollee = this.enrollmentDAO.findById(addEnrollee.getId()).orElse(null);
 
@@ -76,7 +77,7 @@ public class EnrolleeService {
      */
     public void modifyEnrollee(Enrollee modifiedEnrollee, String enrolleeId) {
 
-        this.validator.entityValidator(modifiedEnrollee.getId(), modifiedEnrollee.getName(), modifiedEnrollee.getDateOfBirth(), false);
+        this.validateEnrollee(modifiedEnrollee, false);
 
         final Enrollee existingEnrollee = this.enrollmentDAO.findById(enrolleeId)
                 .orElseThrow(() -> new ResourceDoesNotExistException("Unable To Modify Enrollee, Enrollee Does Not Exist For Id: " + enrolleeId));
@@ -96,6 +97,22 @@ public class EnrolleeService {
      */
     public void deleteEnrollee(String enrolleeId) {
         this.enrollmentDAO.deleteById(enrolleeId);
+    }
+
+    /**
+     * Helper method to validate an Enrollee
+     *
+     * @param enrollee the Enrollee to validate
+     * @param newEntity whether it is a new entity in the database or not
+     */
+    private void validateEnrollee(Enrollee enrollee, boolean newEntity) {
+
+        this.validator.entityValidator(enrollee.getId(), enrollee.getName(), enrollee.getDateOfBirth(), newEntity);
+
+        for (Dependent dependent : enrollee.getDependents()) {
+            this.validator.entityValidator(dependent.getId(), dependent.getName(), dependent.getDateOfBirth(), newEntity);
+        }
+
     }
 
 }

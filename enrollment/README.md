@@ -32,9 +32,9 @@ Alternatively, the Gradle window in your IDE should have the "bootRun" and "test
 * Each of an enrollee's dependents must have an id, name, and birth date
 
 ##Important Links
-Retrieve Enrollees: http://localhost:3001/enrollees
+Retrieve Enrollees: http://localhost:8080/enrollees
  
-Swagger-UI: http://localhost:3001/swagger-ui/index.html
+Swagger-UI: http://localhost:8080/swagger-ui.html
 
 ##Endpoints
 
