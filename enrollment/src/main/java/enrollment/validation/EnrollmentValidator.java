@@ -21,11 +21,9 @@ public class EnrollmentValidator {
      * @param name the Name to validate
      * @param dateOfBirth the Date of Birth to validate
      */
-    public void entityValidator(String id, String name, String dateOfBirth, boolean newEntity) {
+    public void entityValidator(String id, String name, String dateOfBirth) {
 
-        if (newEntity) {
-            this.validateId(id);
-        }
+        this.validateId(id);
         this.validateName(name);
         this.validateDateOfBirth(dateOfBirth);
     }

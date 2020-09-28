@@ -1,5 +1,6 @@
 package enrollment.service;
 
+import enrollment.common.Dependent;
 import enrollment.common.Enrollee;
 import enrollment.exceptions.ResourceDoesNotExistException;
 import enrollment.repository.EnrollmentDAO;
@@ -33,6 +34,9 @@ public class EnrolleeServiceTest {
     @Mock
     private EnrollmentValidator enrollmentValidator;
 
+    @Mock
+    private DependentService dependentService;
+
     private EnrolleeService enrolleeService;
 
     /**
@@ -42,7 +46,7 @@ public class EnrolleeServiceTest {
     public void setUp() {
         initMocks(this);
 
-        this.enrolleeService = new EnrolleeService(enrollmentDAO, enrollmentValidator);
+        this.enrolleeService = new EnrolleeService(dependentService, enrollmentDAO, enrollmentValidator);
     }
 
     @Test
@@ -99,6 +103,7 @@ public class EnrolleeServiceTest {
         Enrollee enrollee = this.createEnrollee();
 
         given(this.enrollmentDAO.findById(anyString())).willReturn(Optional.of(enrollee));
+        given(this.dependentService.retrieveDependentFromEnrollee(any(Enrollee.class), anyString())).willReturn(this.createDependent());
 
         this.enrolleeService.modifyEnrollee(enrollee, "1");
 
@@ -111,6 +116,19 @@ public class EnrolleeServiceTest {
         given(this.enrollmentDAO.findById(anyString())).willReturn(Optional.empty());
 
         this.enrolleeService.modifyEnrollee(this.createEnrollee(), "1");
+    }
+
+    @Test(expected = ResourceDoesNotExistException.class)
+    public void modifyEnrolleeWithInvalidDependentIdTest() {
+
+        Enrollee enrollee = this.createEnrollee();
+        enrollee.getDependents().get(0).setId("-1");
+
+        given(this.enrollmentDAO.findById(anyString())).willReturn(Optional.of(enrollee));
+        given(this.dependentService.retrieveDependentFromEnrollee(any(Enrollee.class), anyString())).willReturn(null);
+
+        this.enrolleeService.modifyEnrollee(enrollee, "1");
+
     }
 
     @Test
@@ -135,7 +153,28 @@ public class EnrolleeServiceTest {
         enrollee.setDateOfBirth("1900-01-01");
         enrollee.setPhoneNumber("111-222-3333");
 
+        List<Dependent> dependentList = new ArrayList<>();
+        dependentList.add(this.createDependent());
+
+        enrollee.setDependents(dependentList);
+
         return enrollee;
+
+    }
+
+    /**
+     * Helper Method to create Dependent objects for tests
+     *
+     * @return an Dependent object
+     */
+    private Dependent createDependent() {
+
+        Dependent dependent = new Dependent();
+        dependent.setId("1");
+        dependent.setName("Test Junior");
+        dependent.setDateOfBirth("1900-01-01");
+
+        return dependent;
 
     }
 

@@ -6,7 +6,7 @@ The settings for connecting to MongoDb are located in the application.properties
 
 The server port settings are located in the application.properties file, it is defaulted to 8080.
 
-#Enrollment Application
+# Enrollment Application
 
 > A microservice for tracking the status of enrollees in a health care program.
 
@@ -16,7 +16,7 @@ Run the unit tests using **gradlew cleanTest test**
 
 Alternatively, the Gradle window in your IDE should have the "bootRun" and "test" tasks available to run
 
-##Project Requirements
+## Project Requirements
 
 * Add a new enrollee
 * Modify an existing enrollee
@@ -31,12 +31,12 @@ Alternatively, the Gradle window in your IDE should have the "bootRun" and "test
 * Enrollees may have zero or more dependents
 * Each of an enrollee's dependents must have an id, name, and birth date
 
-##Important Links
+## Important Links
 Retrieve Enrollees: http://localhost:8080/enrollees
  
 Swagger-UI: http://localhost:8080/swagger-ui.html
 
-##Endpoints
+## Endpoints
 
 Endpoint | Http Method | Description
 --- | --- | --- 

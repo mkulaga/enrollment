@@ -17,6 +17,7 @@ import java.util.List;
 @Service
 public class EnrolleeService {
 
+    public final DependentService dependentService;
     public final EnrollmentDAO enrollmentDAO;
     public final EnrollmentValidator validator;
 
@@ -25,8 +26,10 @@ public class EnrolleeService {
      *
      * @param enrollmentDAO the EnrollmentDAO to use
      */
-    public EnrolleeService(EnrollmentDAO enrollmentDAO,
+    public EnrolleeService(DependentService dependentService,
+                           EnrollmentDAO enrollmentDAO,
                            EnrollmentValidator validator) {
+        this.dependentService = dependentService;
         this.enrollmentDAO = enrollmentDAO;
         this.validator = validator;
     }
@@ -47,7 +50,7 @@ public class EnrolleeService {
      */
     public void addEnrollee(Enrollee addEnrollee) {
 
-        this.validateEnrollee(addEnrollee, true);
+        this.validateEnrollee(addEnrollee);
 
         final Enrollee existingEnrollee = this.enrollmentDAO.findById(addEnrollee.getId()).orElse(null);
 
@@ -70,21 +73,33 @@ public class EnrolleeService {
     }
 
     /**
-     * Modifies an existing Enrollee, but not any Dependents
+     * Modifies an existing Enrollee
      *
      * @param modifiedEnrollee the modified Enrollee object
      * @param enrolleeId the Id of the Enrollee to modify
      */
     public void modifyEnrollee(Enrollee modifiedEnrollee, String enrolleeId) {
 
-        this.validateEnrollee(modifiedEnrollee, false);
+        this.validateEnrollee(modifiedEnrollee);
 
         final Enrollee existingEnrollee = this.enrollmentDAO.findById(enrolleeId)
                 .orElseThrow(() -> new ResourceDoesNotExistException("Unable To Modify Enrollee, Enrollee Does Not Exist For Id: " + enrolleeId));
 
+        for (Dependent modifiedDependent : modifiedEnrollee.getDependents()) {
+
+            Dependent existingDependent = this.dependentService.retrieveDependentFromEnrollee(existingEnrollee, modifiedDependent.getId());
+
+            if (existingDependent != null) {
+                existingEnrollee.getDependents().remove(existingDependent);
+            } else {
+                throw new ResourceDoesNotExistException("Unable To Modify Dependent, Dependent Does Not Exist For Id: " + modifiedDependent.getId());
+            }
+
+        }
+
         modifiedEnrollee.setId(existingEnrollee.getId());
         modifiedEnrollee.setPhoneNumber(modifiedEnrollee.getPhoneNumber() != null ? modifiedEnrollee.getPhoneNumber() : existingEnrollee.getPhoneNumber());
-        modifiedEnrollee.setDependents(existingEnrollee.getDependents());
+        modifiedEnrollee.getDependents().addAll(existingEnrollee.getDependents());
 
         this.enrollmentDAO.save(modifiedEnrollee);
 
@@ -103,14 +118,13 @@ public class EnrolleeService {
      * Helper method to validate an Enrollee
      *
      * @param enrollee the Enrollee to validate
-     * @param newEntity whether it is a new entity in the database or not
      */
-    private void validateEnrollee(Enrollee enrollee, boolean newEntity) {
+    private void validateEnrollee(Enrollee enrollee) {
 
-        this.validator.entityValidator(enrollee.getId(), enrollee.getName(), enrollee.getDateOfBirth(), newEntity);
+        this.validator.entityValidator(enrollee.getId(), enrollee.getName(), enrollee.getDateOfBirth());
 
         for (Dependent dependent : enrollee.getDependents()) {
-            this.validator.entityValidator(dependent.getId(), dependent.getName(), dependent.getDateOfBirth(), newEntity);
+            this.validator.entityValidator(dependent.getId(), dependent.getName(), dependent.getDateOfBirth());
         }
 
     }
