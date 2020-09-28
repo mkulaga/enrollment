@@ -49,6 +49,9 @@ public class EnrolleeServiceTest {
         this.enrolleeService = new EnrolleeService(dependentService, enrollmentDAO, enrollmentValidator);
     }
 
+    /**
+     * Test to get a list of Enrollees
+     */
     @Test
     public void getEnrolleesTest() {
 
@@ -66,6 +69,9 @@ public class EnrolleeServiceTest {
 
     }
 
+    /**
+     * Test to get an Enrollee by the Id
+     */
     @Test
     public void getEnrolleeByIdTest() {
 
@@ -81,6 +87,9 @@ public class EnrolleeServiceTest {
         assertEquals(expected.getPhoneNumber(), actual.getPhoneNumber());
     }
 
+    /**
+     * Test to get an Enrollee that doesn't exist
+     */
     @Test(expected = ResourceDoesNotExistException.class)
     public void getEnrolleeByInvalidIdTest() {
 
@@ -89,6 +98,9 @@ public class EnrolleeServiceTest {
         this.enrolleeService.getEnrolleeById("-1");
     }
 
+    /**
+     * Test to add an Enrollee
+     */
     @Test
     public void addEnrolleeTest() {
 
@@ -97,6 +109,9 @@ public class EnrolleeServiceTest {
         verify(this.enrollmentDAO, times(1)).insert(any(Enrollee.class));
     }
 
+    /**
+     * Test to modify an Enrollee
+     */
     @Test
     public void modifyEnrolleeTest() {
 
@@ -110,6 +125,9 @@ public class EnrolleeServiceTest {
         verify(this.enrollmentDAO, times(1)).save(any(Enrollee.class));
     }
 
+    /**
+     * Test to modify an Enrollee that doesn't exist
+     */
     @Test(expected = ResourceDoesNotExistException.class)
     public void modifyEnrolleeWithInvalidIdTest() {
 
@@ -118,6 +136,9 @@ public class EnrolleeServiceTest {
         this.enrolleeService.modifyEnrollee(this.createEnrollee(), "1");
     }
 
+    /**
+     * Test to modify an Enrolle with a Dependent that doesn't exist
+     */
     @Test(expected = ResourceDoesNotExistException.class)
     public void modifyEnrolleeWithInvalidDependentIdTest() {
 
@@ -131,6 +152,9 @@ public class EnrolleeServiceTest {
 
     }
 
+    /**
+     * Test to delete an Enrollee
+     */
     @Test
     public void deleteEnrolleeTest() {
 

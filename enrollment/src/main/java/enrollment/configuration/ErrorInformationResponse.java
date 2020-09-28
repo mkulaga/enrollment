@@ -19,6 +19,8 @@ class ErrorInformationResponse {
         this.message = message;
     };
 
+    //Getters and Setters
+
     public String getMessage() {
         return message;
     }

@@ -44,6 +44,9 @@ public class DependentServiceTest {
         this.dependentService = new DependentService(enrollmentDAO, enrollmentValidator);
     }
 
+    /**
+     * Test to add a Dependent to an Enrollee
+     */
     @Test
     public void addDependentTest() {
 
@@ -60,6 +63,9 @@ public class DependentServiceTest {
 
     }
 
+    /**
+     * Test to add a Dependent to an Enrollee that doesn't exist
+     */
     @Test(expected = ResourceDoesNotExistException.class)
     public void addDependentWithInvalidEnrolleeIdTest() {
 
@@ -69,6 +75,9 @@ public class DependentServiceTest {
 
     }
 
+    /**
+     * Test to add an already existing Dependent to an Enrollee
+     */
     @Test(expected = ResourceAlreadyExistsException.class)
     public void addDependentWithInvalidDependentIdTest() {
 
@@ -82,6 +91,9 @@ public class DependentServiceTest {
 
     }
 
+    /**
+     * Test to modify a Dependent
+     */
     @Test
     public void modifyDependentTest() {
 
@@ -101,6 +113,9 @@ public class DependentServiceTest {
 
     }
 
+    /**
+     * Test to modify a Dependent with an invalid Enrollee Id
+     */
     @Test(expected = ResourceDoesNotExistException.class)
     public void modifyDependentForInvalidEnrolleeIdTest() {
 
@@ -110,6 +125,9 @@ public class DependentServiceTest {
 
     }
 
+    /**
+     * Test to modify a Dependent that doesn't exist
+     */
     @Test(expected = ResourceDoesNotExistException.class)
     public void modifyDependentWithInvalidDependentIdTest() {
 
@@ -123,6 +141,9 @@ public class DependentServiceTest {
 
     }
 
+    /**
+     * Test to delete a Dependent
+     */
     @Test
     public void deleteDependentTest() {
 
@@ -139,6 +160,9 @@ public class DependentServiceTest {
 
     }
 
+    /**
+     * Test to delete a Dependent for an Enrollee that doesn't exist
+     */
     @Test(expected = ResourceDoesNotExistException.class)
     public void deleteDependentForInvalidEnrolleeIdTest() {
 
@@ -148,6 +172,9 @@ public class DependentServiceTest {
 
     }
 
+    /**
+     * Test to Delete a Dependent that doesn't exist
+     */
     @Test(expected = ResourceDoesNotExistException.class)
     public void deleteDependentsForInvalidDependentIdTest() {
 

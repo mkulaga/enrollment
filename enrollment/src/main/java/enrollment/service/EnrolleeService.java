@@ -87,7 +87,7 @@ public class EnrolleeService {
 
         for (Dependent modifiedDependent : modifiedEnrollee.getDependents()) {
 
-            Dependent existingDependent = this.dependentService.retrieveDependentFromEnrollee(existingEnrollee, modifiedDependent.getId());
+            final Dependent existingDependent = this.dependentService.retrieveDependentFromEnrollee(existingEnrollee, modifiedDependent.getId());
 
             if (existingDependent != null) {
                 existingEnrollee.getDependents().remove(existingDependent);

@@ -15,6 +15,8 @@ public class Dependent {
 
     private String dateOfBirth;
 
+    //Getters and Setters
+
     public String getId() {
         return id;
     }

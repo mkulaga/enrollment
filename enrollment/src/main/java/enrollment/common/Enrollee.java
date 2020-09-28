@@ -31,6 +31,7 @@ public class Enrollee {
 
     private List<Dependent> dependents = new ArrayList<>();
 
+    //Getters and Setters
 
     public String getId() {
         return id;
