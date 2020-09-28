@@ -48,3 +48,83 @@ Endpoint | Http Method | Description
 /enrollees/{enrolleeId}/dependents | POST | Adds a new Dependent to an Enrollee
 /enrollees/{enrolleeId}/dependents/{dependentId} | PATCH | Modifies a Dependent
 /enrollees/{enrolleeId}/dependents/{dependentId} | DELETE | Deletes a Dependent
+
+## Example Requests
+
+#### GET - /enrollees
+
+No Request Body
+
+#### POST - /enrollees
+
+```
+{
+  "id": "1",
+  "name": "John Smith",
+  "activationStatus": true,
+  "dateOfBirth": "1980-10-10",
+  "phoneNumber": "1-234-5678",
+  "dependents": [
+    {
+      "id": "1",
+      "name": "John Smith Jr",
+      "dateOfBirth": "2000-01-01"
+    },
+    {
+      "id": "2",
+      "name": "John Smith III",
+      "dateOfBirth": "2000-10-01"
+    }   
+  ]
+}
+```
+
+#### GET - /enrollees/1
+
+No Request Body
+
+#### PATCH - /enrollees/1
+
+```
+{
+  "id": "1",
+  "name": "Jonathon Smith",
+  "activationStatus": true,
+  "dateOfBirth": "1980-10-10",
+  "dependents": [
+    {
+      "id": "2",
+      "name": "John Smith IV",
+      "dateOfBirth": "2000-10-01"
+    }   
+  ]
+}
+```
+
+#### DELETE - /enrollees/1
+
+No Request Body
+
+#### POST - /enrollees/1/dependents
+
+```
+{
+  "id": "3",
+  "name": "Jane Smith",
+  "dateOfBirth": "2001-09-01"
+}
+```
+
+#### PATCH - /enrollees/1/dependents/3
+
+```
+{
+  "id": "3",
+  "name": "Jane Smith",
+  "dateOfBirth": "2001-09-02"
+}
+```
+
+#### DELETE - /enrollees/1/dependents/3
+
+No Request Body
